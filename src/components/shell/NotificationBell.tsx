@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { Notification } from "@/lib/types";
@@ -25,22 +25,24 @@ function timeAgo(iso: string): string {
  */
 export function NotificationBell({ userId }: { userId: string }) {
   const router = useRouter();
-  const supabase = useMemo(() => createClient(), []);
+  // The browser client is created inside effects and handlers, never during render:
+  // constructing it on the server reads the clock and trips Cache Components prerendering.
   const [items, setItems] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
 
   const fetchLatest = useCallback(async (): Promise<Notification[] | null> => {
-    const { data, error } = await supabase
+    const { data, error } = await createClient()
       .from("notifications")
       .select("*")
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .limit(LIMIT);
     return error ? null : (data as Notification[]);
-  }, [supabase, userId]);
+  }, [userId]);
 
   useEffect(() => {
     let cancelled = false;
+    const supabase = createClient();
     const refresh = () => {
       fetchLatest().then((rows) => {
         if (!cancelled && rows) setItems(rows);
@@ -63,7 +65,7 @@ export function NotificationBell({ userId }: { userId: string }) {
       clearInterval(timer);
       void supabase.removeChannel(channel);
     };
-  }, [supabase, userId, fetchLatest]);
+  }, [userId, fetchLatest]);
 
   const unread = items.filter((n) => !n.read_at).length;
 
@@ -71,7 +73,7 @@ export function NotificationBell({ userId }: { userId: string }) {
     if (ids.length === 0) return;
     const now = new Date().toISOString();
     setItems((prev) => prev.map((n) => (ids.includes(n.id) ? { ...n, read_at: n.read_at ?? now } : n)));
-    await supabase.from("notifications").update({ read_at: now }).in("id", ids).is("read_at", null);
+    await createClient().from("notifications").update({ read_at: now }).in("id", ids).is("read_at", null);
   }
 
   function openNotification(n: Notification) {
