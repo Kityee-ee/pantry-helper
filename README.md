@@ -44,7 +44,7 @@ Password for all: `pantry123`. The login page has one-tap buttons for each.
 | mei@pantry.demo | Mei Chen | employee |
 | tom@pantry.demo | Tom Walker | employee |
 
-Seeded story (W = Monday of the current week): a baseline count and a placed order two Fridays ago; a full delivery last week's Monday; headcount 60 for last week; a count last Friday showing last week's consumption; a placed order last Friday for this week; a delivery this Monday with **Milk 2L short-delivered (6 of 12)**. Tea bags are heavily overstocked. Two open low-stock reports for milk (Mei, Tom), one resolved maintenance report (Josh), and `oat milk` requested by Mei and Tom, so Josh's request is the third. There is no order for next week.
+Seeded story (W = Monday of the current week): a baseline count and a placed order two Fridays ago; a full delivery last week's Monday; headcount 60 for last week; a count last Friday showing last week's consumption; a placed order last Friday for this week. **This week's delivery is not seeded**: uploading its docket and reconciling it against that order is the demo, and `npm run seed` ends by printing the expected docket (Milk 2L short at 6 of 12). Stock levels are as of last Friday's count. Tea bags are heavily overstocked. Two open low-stock reports for milk (Mei, Tom), one resolved maintenance report (Josh), and `oat milk` requested by Mei and Tom, so Josh's request is the third. There is no delivery for this week and no order for next week.
 
 ## Route map
 

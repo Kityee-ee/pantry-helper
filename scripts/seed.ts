@@ -10,8 +10,11 @@
  *   W-7  (Mon)  last week's delivery, in full
  *   W-3  (Fri)  stock count showing last week's real consumption (headcount 60),
  *               and the placed order for THIS week ("the order dated last Friday")
- *   W    (Mon)  this week's delivery, with Milk 2L short-delivered (6 of 12)
- * No order exists for next week: creating it is the demo.
+ * This week's delivery is NOT seeded: uploading its docket and reconciling it
+ * against the order placed last Friday is the live demo. The delB numbers below
+ * are the "expected docket" (Milk 2L short at 6 of 12), printed at the end of
+ * the run so a matching demo docket can be made.
+ * No order exists for next week either: creating it is also the demo.
  */
 import { randomUUID } from "node:crypto";
 import { existsSync } from "node:fs";
@@ -44,10 +47,11 @@ type UserKey = (typeof USERS)[number]["key"];
 
 // base  = counted two Fridays ago        delA = delivered last week's Monday
 // count = counted last Friday            ordB = ordered last Friday for this week
-// delB  = delivered this week's Monday   current_qty = count + delB
+// delB  = EXPECTED docket for this week's delivery (not seeded, see header)
+// current_qty = count (stock as of last Friday's count)
 // Consumption last week = base + delA - count.
 const ITEMS = [
-  { name: "Milk 2L", unit: "bottle", par: 12, base: 3, delA: 12, count: 1, ordB: 12, delB: 6 }, // short-delivered
+  { name: "Milk 2L", unit: "bottle", par: 12, base: 3, delA: 12, count: 1, ordB: 12, delB: 6 }, // docket will be short
   { name: "Soy milk 1L", unit: "carton", par: 6, base: 2, delA: 6, count: 2, ordB: 6, delB: 6 },
   { name: "Instant coffee", unit: "500g tin", par: 3, base: 2, delA: 2, count: 1, ordB: 2, delB: 2 },
   { name: "Coffee beans", unit: "1kg bag", par: 4, base: 2, delA: 4, count: 1, ordB: 4, delB: 4 },
@@ -184,7 +188,7 @@ async function main() {
           name: i.name,
           unit: i.unit,
           par_level: i.par,
-          current_qty: i.count + i.delB,
+          current_qty: i.count,
           active: true,
           created_at: at(addDays(W, -60), 9),
         })),
@@ -202,7 +206,7 @@ async function main() {
 
   // Orders
   const orderAId = randomUUID(); // supplied last week, delivered in full
-  const orderBId = randomUUID(); // placed last Friday for this week, milk short-delivered
+  const orderBId = randomUUID(); // placed last Friday for this week; its delivery is the live demo
   const orderALines = ITEMS.filter((i) => i.delA > 0);
   const orderBLines = ITEMS.filter((i) => i.ordB > 0);
   const listText = (lines: typeof ITEMS, qty: (i: (typeof ITEMS)[number]) => number) =>
@@ -263,8 +267,6 @@ async function main() {
 
   // Deliveries. raw_extraction shape here is illustrative; the delivery lane owns the real shape.
   const deliveryAId = randomUUID();
-  const deliveryBId = randomUUID();
-  const deliveredB = ITEMS.filter((i) => i.delB > 0);
   check(
     "insert deliveries",
     await db.from("deliveries").insert([
@@ -278,18 +280,6 @@ async function main() {
         },
         created_by: users.priya,
         created_at: at(lastWeek, 9, 30),
-      },
-      {
-        id: deliveryBId,
-        order_id: orderBId,
-        photo_path: null,
-        raw_extraction: {
-          supplier: "Office Pantry Co",
-          note: "Milk 2L: 6 supplied, 6 on back order",
-          lines: deliveredB.map((i) => ({ name: i.name, qty: i.delB })),
-        },
-        created_by: users.priya,
-        created_at: at(W, 9, 30),
       },
     ]),
   );
@@ -317,16 +307,6 @@ async function main() {
       qty_after: i.count,
       created_at: at(lastFriday, 16),
     });
-    if (i.delB > 0) {
-      events.push({
-        ...common,
-        kind: "delivery",
-        delta: i.delB,
-        qty_after: i.count + i.delB,
-        delivery_id: deliveryBId,
-        created_at: at(W, 9, 30),
-      });
-    }
   }
   check("insert stock events", await db.from("stock_events").insert(events));
 
@@ -389,9 +369,26 @@ async function main() {
   );
 
   console.log(
-    `Seeded ${ITEMS.length} items, 2 placed orders, 2 deliveries, ${events.length} stock events, 5 submissions, headcount ${HEADCOUNT} for ${lastWeek}.`,
+    `Seeded ${ITEMS.length} items, 2 placed orders, 1 delivery (last week), ${events.length} stock events, 5 submissions, headcount ${HEADCOUNT} for ${lastWeek}.`,
   );
-  console.log("No order exists for next week. Done.");
+  console.log("No delivery exists for this week and no order exists for next week.");
+
+  // Expected docket for this week's delivery, against the order placed last Friday.
+  const docket = orderBLines.map((i) => ({
+    item: `${i.name} (${i.unit})`,
+    ordered: String(i.ordB),
+    docket: String(i.delB),
+    note: i.delB < i.ordB ? `SHORT by ${i.ordB - i.delB}` : "",
+  }));
+  const w1 = Math.max(4, ...docket.map((r) => r.item.length));
+  const row = (a: string, b: string, c: string, d: string) =>
+    `${a.padEnd(w1)}  ${b.padStart(7)}  ${c.padStart(6)}  ${d}`.trimEnd();
+  console.log(`
+Expected docket for the demo delivery (order for week of ${W}, supplier Office Pantry Co):`);
+  console.log(row("Item", "Ordered", "Docket", "Note"));
+  console.log(row("-".repeat(w1), "-------", "------", "----"));
+  for (const r of docket) console.log(row(r.item, r.ordered, r.docket, r.note));
+  console.log("Done.");
 }
 
 main().catch((e) => {
