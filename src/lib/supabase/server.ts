@@ -1,6 +1,7 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { supabaseEnv } from "./env";
 
 /**
@@ -11,6 +12,8 @@ import { supabaseEnv } from "./env";
  * inside a <Suspense> boundary when rendering, or in an action / route handler.
  */
 export async function createClient() {
+  // Supabase auth reads the clock while loading the session, so mark this as request-time work first.
+  await connection();
   const cookieStore = await cookies();
   const { url, anonKey } = supabaseEnv();
 
