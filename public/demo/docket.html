@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Delivery Docket DD-48217 - Harbour Wholesale Foodservice</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 24px 12px;
+        background: #d9dcd6;
+        color: #111;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
+        line-height: 1.35;
+      }
+      .sheet {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 28px 30px 34px;
+        background: #fffef9;
+        border: 1px solid #bbb;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 12px;
+        border-bottom: 3px solid #111;
+      }
+      .brand {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+      .brand small {
+        display: block;
+        margin-top: 2px;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0;
+        text-transform: none;
+        color: #333;
+      }
+      .doc {
+        text-align: right;
+        white-space: nowrap;
+      }
+      .doc h1 {
+        margin: 0 0 4px;
+        font-size: 17px;
+        letter-spacing: 1.5px;
+      }
+      .doc b {
+        margin-left: 4px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 14px;
+      }
+      .parties {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin: 14px 0;
+      }
+      .parties h2 {
+        margin: 0 0 3px;
+        font-size: 10px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #555;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 13px;
+      }
+      th {
+        padding: 6px 6px;
+        border-top: 1.5px solid #111;
+        border-bottom: 1.5px solid #111;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 10px;
+        letter-spacing: 0.8px;
+        text-align: left;
+        text-transform: uppercase;
+      }
+      td {
+        padding: 7px 6px;
+        border-bottom: 1px dotted #999;
+        vertical-align: top;
+      }
+      .n {
+        width: 62px;
+        text-align: right;
+      }
+      .code {
+        width: 78px;
+        color: #333;
+      }
+      .short td {
+        font-weight: 700;
+      }
+      .note {
+        display: block;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: 400;
+        font-style: italic;
+      }
+      tfoot td {
+        border-bottom: 0;
+        border-top: 1.5px solid #111;
+        font-weight: 700;
+      }
+      .foot {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 22px;
+        margin-top: 20px;
+        font-size: 11px;
+      }
+      .sign {
+        margin-top: 26px;
+        padding-top: 4px;
+        border-top: 1px solid #111;
+      }
+      .scrawl {
+        margin: 6px 0 -22px 12px;
+        font-family: "Brush Script MT", "Segoe Script", cursive;
+        font-size: 26px;
+        color: #1b2f7a;
+        transform: rotate(-4deg);
+      }
+      .small {
+        margin-top: 18px;
+        font-size: 10px;
+        color: #555;
+      }
+      @media (max-width: 520px) {
+        .sheet {
+          padding: 18px 14px 24px;
+        }
+        table {
+          font-size: 11.5px;
+        }
+        .code {
+          display: none;
+        }
+        .n {
+          width: 44px;
+        }
+      }
+      @media print {
+        body {
+          padding: 0;
+          background: #fff;
+        }
+        .sheet {
+          max-width: none;
+          border: 0;
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <header>
+        <div class="brand">
+          Harbour Wholesale
+          <small>Foodservice &amp; Office Supplies Pty Ltd &middot; ABN 51 004 218 776</small>
+          <small>14 Dock Road, Alexandria NSW 2015 &middot; (02) 5550 0142</small>
+        </div>
+        <div class="doc">
+          <h1>DELIVERY DOCKET</h1>
+          <div>Docket No. <b>DD-48217</b></div>
+          <div>Date <b id="date">&nbsp;</b></div>
+          <div>Run <b>SYD-04</b> &nbsp; Drop <b>07</b></div>
+        </div>
+      </header>
+
+      <section class="parties">
+        <div>
+          <h2>Deliver to</h2>
+          Northside Studio, Level 3 Kitchen<br />
+          88 Miller Street<br />
+          North Sydney NSW 2060<br />
+          Attn: Priya Sharma
+        </div>
+        <div>
+          <h2>Account</h2>
+          Acct 20417 &middot; Weekly pantry order<br />
+          Cust. ref: PANTRY-WK<br />
+          Terms: 14 days
+        </div>
+      </section>
+
+      <table>
+        <thead>
+          <tr>
+            <th class="code">Code</th>
+            <th>Description</th>
+            <th class="n">Ord</th>
+            <th class="n">Supp</th>
+            <th class="n">B/O</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="short">
+            <td class="code">DA1020</td>
+            <td>
+              F/C MILK 2LT x6
+              <span class="note">Short supplied - balance of 6 on back order</span>
+            </td>
+            <td class="n">12</td>
+            <td class="n">6</td>
+            <td class="n">6</td>
+          </tr>
+          <tr>
+            <td class="code">DA1175</td>
+            <td>SOY MLK UHT 1LT</td>
+            <td class="n">6</td>
+            <td class="n">6</td>
+            <td class="n">0</td>
+          </tr>
+          <tr>
+            <td class="code">BV2204</td>
+            <td>NESCAFE BLEND 43 500G TIN</td>
+            <td class="n">2</td>
+            <td class="n">2</td>
+            <td class="n">0</td>
+          </tr>
+          <tr>
+            <td class="code">BV2310</td>
+            <td>COFFEE BNS ESPRESSO 1KG</td>
+            <td class="n">4</td>
+            <td class="n">4</td>
+            <td class="n">0</td>
+          </tr>
+          <tr>
+            <td class="code">SN3051</td>
+            <td>ARNOTTS ASSTD BISC</td>
+            <td class="n">10</td>
+            <td class="n">10</td>
+            <td class="n">0</td>
+          </tr>
+          <tr>
+            <td class="code">FR0007</td>
+            <td>SEASONAL FRUIT BX OFFICE</td>
+            <td class="n">2</td>
+            <td class="n">2</td>
+            <td class="n">0</td>
+          </tr>
+          <tr>
+            <td class="code">SN3190</td>
+            <td>MUESLI BAR VARIETY BX12</td>
+            <td class="n">4</td>
+            <td class="n">4</td>
+            <td class="n">0</td>
+          </tr>
+          <tr>
+            <td class="code">BV2688</td>
+            <td>SPARK MINERAL WTR CTN24</td>
+            <td class="n">4</td>
+            <td class="n">4</td>
+            <td class="n">0</td>
+          </tr>
+          <tr>
+            <td class="code">CL5012</td>
+            <td>PPR TOWEL ROLL 2PLY</td>
+            <td class="n">6</td>
+            <td class="n">6</td>
+            <td class="n">0</td>
+          </tr>
+          <tr>
+            <td class="code">CL5140</td>
+            <td>DISHWASH LIQ 500ML</td>
+            <td class="n">1</td>
+            <td class="n">1</td>
+            <td class="n">0</td>
+          </tr>
+          <tr>
+            <td class="code">CL5233</td>
+            <td>D/WASHER TABS PK30</td>
+            <td class="n">1</td>
+            <td class="n">1</td>
+            <td class="n">0</td>
+          </tr>
+          <tr>
+            <td class="code">BV2915</td>
+            <td>
+              KOMBUCHA GINGER LEMON 330ML x12
+              <span class="note">Promo sample carton - no charge</span>
+            </td>
+            <td class="n">0</td>
+            <td class="n">1</td>
+            <td class="n">0</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="code"></td>
+            <td>TOTAL UNITS (12 LINES)</td>
+            <td class="n">52</td>
+            <td class="n">47</td>
+            <td class="n">6</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <section class="foot">
+        <div>
+          <b>Driver notes:</b> Left with reception 9:25am. Chilled goods delivered at 3&deg;C. Milk short ex-warehouse,
+          balance to follow on next run.
+          <div class="small">
+            Please check goods on receipt. Claims for shortages or damage must be made within 24 hours quoting the
+            docket number. This is not a tax invoice.
+          </div>
+        </div>
+        <div>
+          <div class="scrawl">P Sharma</div>
+          <div class="sign">Received by (sign)</div>
+          <div class="sign">Driver: D. Nguyen</div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      // Dated the Monday of the current week, so the docket always looks like this week's delivery.
+      (function () {
+        var d = new Date();
+        d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+        document.getElementById("date").textContent = d.toLocaleDateString("en-AU", {
+          weekday: "short",
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+      })();
+    </script>
+  </body>
+</html>
