@@ -230,7 +230,7 @@ Return one line for every item in "items", using its ref as item_ref and its nam
 
 Then add one line for each entry in "requested_items" (items staff asked for that the pantry does not stock yet, already filtered to those with enough requests): item_ref null, item_name as given, is_new true, waste_risk false, a small trial qty of 1 to 3, and reason "Requested by N people" with the real count, optionally followed by a few words. Do not invent any other new lines.
 
-summary: 2 to 3 plain sentences for the manager, written as a short paragraph with no lists. Lead with the headcount change against last week and what it does to the order overall (compare the total of your quantities with last_order_total_units when it is given). Then mention the one or two things most worth knowing, such as an overstocked item skipped to avoid waste, an item bumped because of low-stock reports, or a new item added on request.`;
+summary: 2 to 3 plain sentences for the manager, written as a short paragraph with no lists. Lead with the headcount change against last week and what it does to the order overall, in words only (smaller, larger, about the same). Do NOT state the total number of units or any sum: the totals are calculated in code and appended after your text. Then mention the one or two things most worth knowing, such as an overstocked item skipped to avoid waste, an item bumped because of low-stock reports, or a new item added on request.`;
 
 // Server-side fallback on a declined request is only offered on these models.
 const SUPPORTS_FALLBACK = /^claude-(opus-5|sonnet-5-5|fable-5-1)/.test(AI_MODEL);
@@ -348,8 +348,15 @@ function mergeAiOutput(
     });
   }
 
-  const summary = out.summary.trim().replace(/\s+/g, " ").slice(0, 700);
-  return { source: "ai", summary: summary || fallback.summary, lines };
+  const text = out.summary.trim().replace(/\s+/g, " ").slice(0, 700);
+  if (!text) return { source: "ai", summary: fallback.summary, lines };
+  // Totals are computed here, never by the model, so the sentence always matches the lines.
+  const total = lines.reduce((sum, l) => sum + l.qty, 0);
+  const totals =
+    input.last_order_total_units != null
+      ? `The draft comes to ${total} units against ${input.last_order_total_units} on the last order.`
+      : `The draft comes to ${total} units.`;
+  return { source: "ai", summary: `${text} ${totals}`, lines };
 }
 
 function clip(value: string): string {
